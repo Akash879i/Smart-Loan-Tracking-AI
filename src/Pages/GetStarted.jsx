@@ -2,7 +2,7 @@ import React from "react";
 
 export default function GetStarted() {
   return (
-    <section  id="#getstarted" className="py-24 bg-gradient-to-b from-emerald-600 to-emerald-500">
+    <section  id="getstarted" className="py-24 bg-gradient-to-b from-emerald-600 to-emerald-500">
 
       <div className="max-w-5xl mx-auto px-6">
 

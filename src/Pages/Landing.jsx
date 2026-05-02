@@ -1,7 +1,12 @@
 import React from "react";
 import Image from "../assets/images/Landing.png"
+// import {HashLink} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function Landing() {
+  const navigate = useNavigate();
   return (
     <div className="w-full md:pb-24 bg-emerald-50">
 
@@ -18,7 +23,7 @@ export default function Landing() {
           </div>
 
           {/* Button */}
-          <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-lg transition">
+          <button onClick={()=>navigate("/login")} className="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-lg transition">
             Sign In
           </button>
 
@@ -50,13 +55,16 @@ export default function Landing() {
             </p>
 
             <div className="mt-8 flex gap-4">
-             <a href="getstarted"> <button className="bg-emerald-500 hover:bg-emerald-600 md:text-2xl text-white px-6 py-3 rounded-lg">
+         
+             <button onClick={()=>navigate('/authcard')} className="bg-emerald-500 hover:bg-emerald-600 md:text-2xl text-white px-6 py-3 rounded-lg">
                 Get Started Free →
-              </button></a>
+              </button>
 
+               
               <button className="border border-slate-300 md:text-2xl px-6 py-3 rounded-lg hover:bg-white">
                 Schedule Demo
               </button>
+              
             </div>
           </div>
 

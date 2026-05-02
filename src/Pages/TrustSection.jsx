@@ -1,23 +1,27 @@
 import React from "react";
+import Work1 from "../assets/images/Work1.png"
+import Work2 from "../assets/images/Work2.png"
+import Work3 from "../assets/images/Work3.png"
+import Work4 from "../assets/images/Work4.png"
 
 const stats = [
   {
-    img: "/trust1.jpg",
+    img: Work1,
     value: "10M+",
     label: "Documents Processed",
   },
   {
-    img: "/trust2.jpg",
+    img: Work2,
     value: "500+",
     label: "Banks & Lenders",
   },
   {
-    img: "/trust3.jpg",
+    img: Work3,
     value: "99.9%",
     label: "Accuracy Rate",
   },
   {
-    img: "/trust4.jpg",
+    img: Work4,
     value: "24/7",
     label: "Support Available",
   },
