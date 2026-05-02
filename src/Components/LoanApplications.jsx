@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useFirebase } from "../Auth/firebase";
-import { getFirestore, setDoc, doc, getDocs, where, query, collection } from "firebase/firestore";
 
 export default function LoanApplications() {
   const firebase = useFirebase();
@@ -19,7 +18,7 @@ export default function LoanApplications() {
   // 🔹 Fetch loans
   const fetchLoans = async () => {
     const data = await firebase.getUserLoans();
-    setLoans(data);
+    setLoans(data || []);
   };
 
   useEffect(() => {
@@ -58,17 +57,19 @@ export default function LoanApplications() {
   return (
     <div>
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-semibold">Loan Applications</h1>
-          <p className="text-gray-500">
+          <h1 className="text-2xl sm:text-3xl font-semibold">
+            Loan Applications
+          </h1>
+          <p className="text-gray-500 text-sm sm:text-base">
             Manage your loan applications
           </p>
         </div>
 
         <button
           onClick={() => setShowModal(true)}
-          className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700"
+          className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 w-full sm:w-auto"
         >
           + New Application
         </button>
@@ -76,8 +77,8 @@ export default function LoanApplications() {
 
       {/* EMPTY STATE */}
       {loans.length === 0 ? (
-        <div className="text-center bg-white p-10 rounded-xl shadow">
-          <p className="text-gray-500 mb-4">
+        <div className="text-center bg-white p-6 sm:p-10 rounded-xl shadow">
+          <p className="text-gray-500 mb-4 text-sm sm:text-base">
             No loan applications found
           </p>
           <button
@@ -92,18 +93,18 @@ export default function LoanApplications() {
           {loans.map((loan) => (
             <div
               key={loan.id}
-              className="bg-white p-5 rounded-xl shadow"
+              className="bg-white p-4 sm:p-5 rounded-xl shadow"
             >
-              <div className="flex justify-between">
-                <h2 className="font-semibold text-lg">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                <h2 className="font-semibold text-base sm:text-lg">
                   {loan.type}
                 </h2>
-                <span className="text-sm bg-yellow-100 px-3 py-1 rounded-full">
+                <span className="text-xs sm:text-sm bg-yellow-100 px-3 py-1 rounded-full w-fit">
                   {loan.status}
                 </span>
               </div>
 
-              <p className="text-gray-500">
+              <p className="text-gray-500 mt-1">
                 ₹{loan.amount}
               </p>
               <p className="text-sm text-gray-400">
@@ -119,12 +120,12 @@ export default function LoanApplications() {
 
       {/* MODAL */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white w-full max-w-lg rounded-2xl p-6">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+          <div className="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl p-4 sm:p-6">
 
             {/* HEADER */}
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">
+              <h2 className="text-lg sm:text-xl font-semibold">
                 New Loan Application
               </h2>
               <button onClick={() => setShowModal(false)}>✕</button>
@@ -133,7 +134,6 @@ export default function LoanApplications() {
             {/* FORM */}
             <div className="space-y-4">
 
-              {/* TYPE */}
               <div>
                 <label className="text-sm font-medium">
                   Loan Type *
@@ -151,7 +151,6 @@ export default function LoanApplications() {
                 </select>
               </div>
 
-              {/* AMOUNT */}
               <div>
                 <label className="text-sm font-medium">
                   Loan Amount (₹) *
@@ -165,7 +164,6 @@ export default function LoanApplications() {
                 />
               </div>
 
-              {/* PURPOSE */}
               <div>
                 <label className="text-sm font-medium">
                   Purpose *
@@ -178,7 +176,6 @@ export default function LoanApplications() {
                 />
               </div>
 
-              {/* DURATION */}
               <div>
                 <label className="text-sm font-medium">
                   Duration
@@ -198,16 +195,16 @@ export default function LoanApplications() {
             </div>
 
             {/* ACTIONS */}
-            <div className="flex justify-end gap-3 mt-6">
+            <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 border rounded-lg"
+                className="px-4 py-2 border rounded-lg w-full sm:w-auto"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
-                className="bg-green-600 text-white px-5 py-2 rounded-lg"
+                className="bg-green-600 text-white px-5 py-2 rounded-lg w-full sm:w-auto"
               >
                 Submit Application
               </button>

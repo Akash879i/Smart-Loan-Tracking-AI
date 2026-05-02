@@ -13,14 +13,28 @@ export default function Signup() {
     const[email,setEmail]=useState("");
     const[password,setPassword]=useState("");
 
-    const handlesignup = async () => {
-    try {
-    await firebase.Signup(username,email,password)
-    // navigate("/dashboard");
-    } catch (err) {
-    console.log(err.message);
-    }
-    };
+
+    const handleSignup = async () => {
+  if (!email || !email.includes("@")) {
+    alert("Enter valid email");
+    return;
+  }
+
+  if (!password || password.length < 6) {
+    alert("Password must be at least 6 characters");
+    return;
+  }
+
+  try {
+    await firebase.Signup(email, password);
+    navigate("/dashboard");
+
+  } catch (err) {
+    console.error(err.message);
+    alert(err.message);
+  }
+};
+   
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 relative overflow-hidden">
@@ -77,7 +91,7 @@ export default function Signup() {
         </div>
 
         {/* Signup Button */}
-        <button onClick={handlesignup} className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition duration-300 shadow-md hover:scale-105">
+        <button onClick={handleSignup} className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition duration-300 shadow-md hover:scale-105">
           Sign Up
         </button>
 

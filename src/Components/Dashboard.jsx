@@ -12,18 +12,20 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
 
   if (loading) {
-    return <p className="p-10">Loading...</p>;
+    return <p className="p-6 sm:p-10">Loading...</p>;
   }
 
   const handleLogout = async () => {
-  await Logout();
-  navigate("/"); // 🔥 force redirect
-};
+    await Logout();
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
       {/* NAVBAR */}
-      <nav className="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
+      <nav className="bg-white shadow-sm px-4 sm:px-6 md:px-8 py-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+        
+        {/* LEFT */}
         <div className="flex items-center gap-3">
           <div className="bg-green-500 text-white w-10 h-10 rounded-xl flex items-center justify-center">
             ✓
@@ -34,23 +36,25 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="flex gap-6 font-medium">
+        {/* NAV ITEMS */}
+        <div className="flex gap-4 sm:gap-6 font-medium overflow-x-auto scrollbar-hide">
           <NavItem label="Dashboard" tab="dashboard" activeTab={activeTab} setActiveTab={setActiveTab} />
           <NavItem label="Applications" tab="applications" activeTab={activeTab} setActiveTab={setActiveTab} />
           <NavItem label="Documents" tab="documents" activeTab={activeTab} setActiveTab={setActiveTab} />
           <NavItem label="Reports" tab="reports" activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
 
+        {/* LOGOUT */}
         <button
           onClick={handleLogout}
-          className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+          className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition w-full md:w-auto"
         >
           Logout
         </button>
       </nav>
 
       {/* CONTENT */}
-      <div className="p-10">
+      <div className="p-4 sm:p-6 md:p-10">
         {activeTab === "dashboard" && (
           <DashboardHome setActiveTab={setActiveTab} />
         )}
@@ -69,7 +73,7 @@ function NavItem({ label, tab, activeTab, setActiveTab }) {
   return (
     <button
       onClick={() => setActiveTab(tab)}
-      className={`transition ${
+      className={`whitespace-nowrap transition ${
         isActive
           ? "text-green-600 border-b-2 border-green-600"
           : "text-gray-600 hover:text-green-600"
@@ -85,6 +89,7 @@ function DashboardHome({ setActiveTab }) {
   const firebase = useFirebase();
 
   const [loans, setLoans] = useState([]);
+  const [documents, setDocuments] = useState([]); // 🔥 NEW
   const [loadingLoans, setLoadingLoans] = useState(true);
 
   useEffect(() => {
@@ -93,9 +98,11 @@ function DashboardHome({ setActiveTab }) {
     const fetchLoans = async () => {
       try {
         const data = await firebase.getUserLoans();
+        const docData = await firebase.getUserDocuments(); // 🔥 FETCH DOCS
+        setDocuments(docData || []); // 🔥 SET DOCS
         setLoans(data || []);
       } catch (err) {
-        console.error("Loan fetch error:", err);
+        console.error("Dashboard fetch error:", err);
       } finally {
         setLoadingLoans(false);
       }
@@ -106,23 +113,23 @@ function DashboardHome({ setActiveTab }) {
 
   return (
     <>
-      <h2 className="text-3xl font-bold mb-2">Welcome Back!</h2>
-      <p className="text-gray-500 mb-8">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-2">Welcome Back!</h2>
+      <p className="text-gray-500 mb-8 text-sm sm:text-base">
         Here's your loan utilization overview
       </p>
 
       {/* STATS */}
-      <div className="grid md:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-10">
         <StatCard title="Active Loans" value={loans.length} />
         <StatCard
           title="Total Borrowed"
           value={`₹${loans.reduce((sum, l) => sum + Number(l.amount || 0), 0)}`}
         />
-        <StatCard title="Documents Uploaded" value="--" />
+        <StatCard title="Documents Uploaded" value={documents.length} />
       </div>
 
       {/* ACTIVE LOANS */}
-      <div className="bg-white p-6 rounded-2xl shadow mb-10">
+      <div className="bg-white p-4 sm:p-6 rounded-2xl shadow mb-10">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Active Loans</h3>
 
@@ -170,7 +177,7 @@ function DashboardHome({ setActiveTab }) {
       </div>
 
       {/* ACTION CARDS */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         <ActionCard
           title="Upload Documents"
           desc="Keep your loan records updated"
@@ -194,9 +201,9 @@ function DashboardHome({ setActiveTab }) {
 /* 🔹 STAT CARD */
 function StatCard({ title, value }) {
   return (
-    <div className="bg-white p-6 rounded-2xl shadow">
+    <div className="bg-white p-4 sm:p-6 rounded-2xl shadow">
       <h3 className="text-gray-500 text-sm">{title}</h3>
-      <p className="text-3xl font-bold mt-2">{value}</p>
+      <p className="text-2xl sm:text-3xl font-bold mt-2">{value}</p>
     </div>
   );
 }
@@ -204,13 +211,13 @@ function StatCard({ title, value }) {
 /* 🔹 ACTION CARD */
 function ActionCard({ title, desc, button, onClick, color }) {
   return (
-    <div className={`${color} text-white p-8 rounded-2xl shadow`}>
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="mb-6">{desc}</p>
+    <div className={`${color} text-white p-6 sm:p-8 rounded-2xl shadow`}>
+      <h3 className="text-lg sm:text-xl font-bold mb-2">{title}</h3>
+      <p className="mb-6 text-sm sm:text-base">{desc}</p>
 
       <button
         onClick={onClick}
-        className="bg-white text-black px-5 py-2 rounded-lg"
+        className="bg-white text-black px-5 py-2 rounded-lg w-full sm:w-auto"
       >
         {button}
       </button>
