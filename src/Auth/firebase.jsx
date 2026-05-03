@@ -19,6 +19,7 @@ import {
   collection,
   addDoc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -78,6 +79,14 @@ export const Firebaseprovider = ({ children }) => {
     });
   };
 
+
+  const updateLoan = async (id, data) => {
+  const ref = doc(db, "loanApplications", id);
+  await updateDoc(ref, data);
+};
+
+// export it along with your other functions
+
   const getUserLoans = async () => {
     if (!user) return [];
 
@@ -93,6 +102,8 @@ export const Firebaseprovider = ({ children }) => {
       ...doc.data(),
     }));
   };
+
+  
 
   // 🔥 DOCUMENTS
   const addDocument = async (data) => {
@@ -125,6 +136,13 @@ export const Firebaseprovider = ({ children }) => {
     await deleteDoc(doc(db, "documents", id));
   };
 
+  const updateDocument = async (id, data) => {
+  if (!user) throw new Error("No user");
+
+  const ref = doc(db, "documents", id);
+  await updateDoc(ref, data);
+};
+
   return (
     <FirebaseContext.Provider
       value={{
@@ -139,6 +157,8 @@ export const Firebaseprovider = ({ children }) => {
         addDocument,
         getUserDocuments,
         deleteDocument,
+        updateDocument,
+        updateLoan,
       }}
     >
       {children}
